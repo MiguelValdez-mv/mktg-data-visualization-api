@@ -5,7 +5,10 @@
   "license": "MIT",
   "scripts": {
     "start": "nodemon --exec babel-node src/index.js",
-    "build": "babel src --out-dir build"
+    "build": "babel src --out-dir build",
+    "lint": "eslint --fix . --ext .js",
+    "fmt": "prettier --write .",
+    "fmt:check": "prettier --check ."
   },
   "devDependencies": {
     "@babel/cli": "^7.19.3",
@@ -13,7 +16,13 @@
     "@babel/node": "^7.19.1",
     "@babel/preset-env": "^7.19.4",
     "babel-plugin-module-resolver": "^4.1.0",
-    "nodemon": "^2.0.20"
+    "eslint": "^7.32.0 || ^8.2.0",
+    "eslint-config-airbnb-base": "^15.0.0",
+    "eslint-config-prettier": "^8.5.0",
+    "eslint-import-resolver-babel-module": "^5.3.1",
+    "eslint-plugin-import": "^2.26.0",
+    "nodemon": "^2.0.20",
+    "prettier": "^2.7.1"
   },
   "dependencies": {
     "express": "^4.18.2"

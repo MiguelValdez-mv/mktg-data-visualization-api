@@ -1,8 +1,8 @@
 import express from "express";
 
-var app = express();
+const app = express();
 
-var port = 4000;
+const port = 4000;
 
 app.get("/", (req, res) => {
   res.send({
