@@ -14,5 +14,7 @@
       "babel-module": {}
     }
   },
-  "rules": {}
+  "rules": {
+    "import/prefer-default-export": "off"
+  }
 }
