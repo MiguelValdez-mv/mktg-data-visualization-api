@@ -1,12 +1,20 @@
+import consola from "consola";
 import mongoose from "mongoose";
 
 import { ENV } from "@/constants";
 
-const uri = `mongodb://${ENV.DB_HOST}/${ENV.DB_NAME}`;
-const config = {
-  useNewUrlParser: true,
-  useUnifiedTopology: true,
-};
-mongoose.connect(uri, config);
+export const connectDb = async () => {
+  const uri = `mongodb://${ENV.DB_HOST}/${ENV.DB_NAME}`;
+  const config = {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+  };
 
-export { Businesses, Connections, Panels, Users, Widgets } from "./schemas";
+  try {
+    await mongoose.connect(uri, config);
+
+    consola.info("Database Connected");
+  } catch (err) {
+    consola.error(err);
+  }
+};

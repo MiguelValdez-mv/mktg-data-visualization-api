@@ -1,15 +1,15 @@
+import consola from "consola";
 import express from "express";
+
+import { ENV } from "@/constants";
+import { connectDb } from "@/db";
 
 const app = express();
 
-const port = 4000;
+app.use(express.json());
 
-app.get("/", (req, res) => {
-  res.send({
-    message: "Hola Mundo",
-  });
-});
+app.listen(ENV.PORT, async () => {
+  consola.info(`Server started at port ${ENV.PORT}`);
 
-app.listen(port, () => {
-  console.log(`Server started at port ${port}`);
+  await connectDb();
 });
