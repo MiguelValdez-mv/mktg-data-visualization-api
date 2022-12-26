@@ -9,6 +9,7 @@ import Session from "supertokens-node/recipe/session";
 
 import { ENV } from "@/constants";
 import { connectDb } from "@/db";
+import usersRoutes from "@/routes/users";
 
 supertokens.init({
   framework: "express",
@@ -44,6 +45,8 @@ app.use(
 );
 app.use(middleware());
 app.use(express.json());
+
+app.use("/users", usersRoutes);
 
 app.listen(ENV.PORT, async () => {
   consola.info(`Server started at port ${ENV.PORT}`);

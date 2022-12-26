@@ -1,5 +1,10 @@
 import mongoose from "mongoose";
 
-const WidgetsSchema = new mongoose.Schema({});
+const widgetsSchema = new mongoose.Schema(
+  {},
+  {
+    timestamps: true,
+  }
+);
 
-export const Widgets = mongoose.model("Widgets", WidgetsSchema);
+export const Widgets = mongoose.model("Widgets", widgetsSchema);

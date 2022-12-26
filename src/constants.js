@@ -14,3 +14,9 @@ export const ENV = {
     return process.env.REACT_APP_API_URL || `http://localhost:${this.PORT}`;
   },
 };
+
+export const USER_ROLES = {
+  ADMIN: "ADMIN",
+  OWNER: "OWNER",
+  EMPLOYEE: "EMPLOYEE",
+};
