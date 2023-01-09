@@ -1,5 +1,16 @@
 import mongoose from "mongoose";
 
-const UsersSchema = new mongoose.Schema({});
+import { USER_ROLES } from "@/constants";
 
-export const Users = mongoose.model("Users", UsersSchema);
+const usersSchema = new mongoose.Schema(
+  {
+    name: { type: String, required: true },
+    email: { type: String, required: true },
+    role: { type: String, enum: Object.values(USER_ROLES), required: true },
+  },
+  {
+    timestamps: true,
+  }
+);
+
+export const Users = mongoose.model("Users", usersSchema);

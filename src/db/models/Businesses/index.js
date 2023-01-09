@@ -1,5 +1,10 @@
 import mongoose from "mongoose";
 
-const BusinessesSchema = new mongoose.Schema({});
+const businessesSchema = new mongoose.Schema(
+  {},
+  {
+    timestamps: true,
+  }
+);
 
-export const Businesses = mongoose.model("Businesses", BusinessesSchema);
+export const Businesses = mongoose.model("Businesses", businessesSchema);
