@@ -4,7 +4,7 @@ import { USER_ROLES } from "@/constants";
 
 const usersSchema = new mongoose.Schema(
   {
-    fullName: { type: String, required: true },
+    name: { type: String, required: true },
     email: { type: String, required: true },
     role: { type: String, enum: Object.values(USER_ROLES), required: true },
   },
