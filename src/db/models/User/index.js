@@ -2,7 +2,7 @@ import mongoose from "mongoose";
 
 import { USER_ROLES } from "@/constants";
 
-const usersSchema = new mongoose.Schema(
+const userSchema = new mongoose.Schema(
   {
     name: { type: String, required: true },
     email: { type: String, required: true },
@@ -13,4 +13,4 @@ const usersSchema = new mongoose.Schema(
   }
 );
 
-export const Users = mongoose.model("Users", usersSchema);
+export const User = mongoose.model("User", userSchema);

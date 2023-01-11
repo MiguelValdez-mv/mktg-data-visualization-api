@@ -1,10 +1,10 @@
 import express from "express";
+import { verifySession } from "supertokens-node/recipe/session/framework/express";
 
 import {
   checkUserExistenceByEmail,
   getUserDetailsFromSupertokensId,
 } from "@/controllers/users";
-import { verifySession } from "@/middlewares/verifySession";
 
 const router = express.Router();
 
