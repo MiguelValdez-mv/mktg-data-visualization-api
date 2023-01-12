@@ -16,3 +16,23 @@ export const getUserDetailsFromSupertokensId = async (req, res) => {
 
   res.status(200).send(userDetails);
 };
+
+export const createUser = async (req, res) => {
+  const { name, email, role } = req.body;
+
+  let avatar;
+  if (req.file) {
+    avatar = `${req.protocol}://${req.get("host")}/uploads/${
+      req.file.filename
+    }`;
+  }
+
+  const newUser = await User.create({
+    name,
+    email,
+    role,
+    avatar,
+  });
+
+  res.status(200).send(newUser);
+};

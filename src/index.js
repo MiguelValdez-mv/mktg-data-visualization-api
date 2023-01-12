@@ -2,6 +2,7 @@ import consola from "consola";
 import cors from "cors";
 import express from "express";
 import morgan from "morgan";
+import path from "path";
 import supertokens from "supertokens-node";
 import { middleware } from "supertokens-node/framework/express";
 
@@ -16,6 +17,7 @@ const app = express();
 
 // Middlewares
 app.use(express.json());
+app.use(morgan("dev"));
 app.use(
   cors({
     origin: ENV.REACT_APP_WEBSITE_URL,
@@ -24,10 +26,9 @@ app.use(
   })
 );
 app.use(middleware());
-app.use(morgan("dev"));
 
 // Static files
-app.use("/uploads", express.static("./uploads"));
+app.use("/uploads", express.static(path.join(__dirname, "./uploads")));
 
 // Routes
 app.use("/users", usersRoutes);
