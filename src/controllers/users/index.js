@@ -2,6 +2,7 @@ import Passwordless from "supertokens-node/recipe/passwordless";
 
 import { User } from "@/db/models/User";
 import { getFileUrlFromRequest } from "@/utils/getFileUrlFromRequest";
+import { sendMail } from "@/utils/sendMail";
 
 export const checkUserExistenceByEmail = async (req, res) => {
   const { email } = req.query;
@@ -11,7 +12,7 @@ export const checkUserExistenceByEmail = async (req, res) => {
 };
 
 export const createUser = async (req, res) => {
-  const { name, email, role } = req.body;
+  const { name, email, role, notifyRegistration } = req.body;
 
   const newUser = await User.create({
     name,
@@ -19,6 +20,14 @@ export const createUser = async (req, res) => {
     role,
     avatar: getFileUrlFromRequest(req),
   });
+
+  if (notifyRegistration) {
+    await sendMail({
+      to: email,
+      subject: "¡Bienvenid@!",
+      text: `Hola ${name}, \nSu cuenta fue registrada exitosamente. Su email de acceso es: ${email}`,
+    });
+  }
 
   res.status(200).send(newUser);
 };

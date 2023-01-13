@@ -13,6 +13,8 @@ export const ENV = {
   get REACT_APP_API_URL() {
     return process.env.REACT_APP_API_URL || `http://localhost:${this.PORT}`;
   },
+  NODEMAILER_USER: process.env.NODEMAILER_USER,
+  NODEMAILER_PASSWORD: process.env.NODEMAILER_PASSWORD,
 };
 
 export const USER_ROLES = {
