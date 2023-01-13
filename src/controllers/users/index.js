@@ -10,14 +10,6 @@ export const checkUserExistenceByEmail = async (req, res) => {
   res.status(200).send(!!user);
 };
 
-export const getUserFromSession = async (req, res) => {
-  const userId = req.session.getUserId();
-  const { email } = await Passwordless.getUserById({ userId });
-  const user = await User.findOne({ email });
-
-  res.status(200).send(user);
-};
-
 export const createUser = async (req, res) => {
   const { name, email, role } = req.body;
 
@@ -29,4 +21,12 @@ export const createUser = async (req, res) => {
   });
 
   res.status(200).send(newUser);
+};
+
+export const getUserFromSession = async (req, res) => {
+  const userId = req.session.getUserId();
+  const { email } = await Passwordless.getUserById({ userId });
+  const user = await User.findOne({ email });
+
+  res.status(200).send(user);
 };
