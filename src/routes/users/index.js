@@ -3,6 +3,7 @@ import { verifySession } from "supertokens-node/recipe/session/framework/express
 
 import {
   checkUserExistenceByEmail,
+  getUsers,
   createUser,
   getUserFromSession,
 } from "@/controllers/users";
@@ -14,6 +15,7 @@ const router = express.Router();
 router.get("/user-by-email-exists", catchErrors(checkUserExistenceByEmail));
 
 router.use(verifySession());
+router.get("/", catchErrors(getUsers));
 router.post("/", upload.single("avatar"), catchErrors(createUser));
 router.get("/get-user-from-session", catchErrors(getUserFromSession));
 

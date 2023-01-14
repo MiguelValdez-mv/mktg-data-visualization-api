@@ -11,6 +11,12 @@ export const checkUserExistenceByEmail = async (req, res) => {
   res.status(200).send(!!user);
 };
 
+export const getUsers = async (req, res) => {
+  const users = await User.find();
+
+  res.status(200).send(users);
+};
+
 export const createUser = async (req, res) => {
   const { name, email, role, notifyRegistration } = req.body;
 
@@ -25,7 +31,7 @@ export const createUser = async (req, res) => {
     await sendMail({
       to: email,
       subject: "¡Bienvenid@!",
-      text: `Hola ${name}, \nSu cuenta fue registrada exitosamente. Su email de acceso es: ${email}`,
+      text: `Hola ${name}, \n\nSu cuenta fue registrada exitosamente. Su email de acceso es: ${email}`,
     });
   }
 
