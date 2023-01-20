@@ -5,7 +5,8 @@ import {
   checkUserExistenceByEmail,
   getUsers,
   createUser,
-  getUserFromSession,
+  getUserById,
+  getUserBySession,
 } from "@/controllers/users";
 import { catchErrors } from "@/middlewares/error";
 import { upload } from "@/middlewares/upload";
@@ -17,6 +18,7 @@ router.get("/user-by-email-exists", catchErrors(checkUserExistenceByEmail));
 router.use(verifySession());
 router.get("/", catchErrors(getUsers));
 router.post("/", upload.single("avatar"), catchErrors(createUser));
-router.get("/get-user-from-session", catchErrors(getUserFromSession));
+router.get("/user-by-id/:id", catchErrors(getUserById));
+router.get("/user-by-session", catchErrors(getUserBySession));
 
 export default router;

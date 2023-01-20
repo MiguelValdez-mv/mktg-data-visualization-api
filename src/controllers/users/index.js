@@ -38,7 +38,20 @@ export const createUser = async (req, res) => {
   res.status(200).send(newUser);
 };
 
-export const getUserFromSession = async (req, res) => {
+export const getUserById = async (req, res) => {
+  const { id } = req.params;
+
+  const user = await User.findOne({ id });
+
+  if (!user) {
+    res.status(404).send({ message: "User not found" });
+    return;
+  }
+
+  res.status(200).send(user);
+};
+
+export const getUserBySession = async (req, res) => {
   const userId = req.session.getUserId();
   const { email } = await Passwordless.getUserById({ userId });
   const user = await User.findOne({ email });
