@@ -1,4 +1,4 @@
-export const getFileUrlFromRequest = (req) => {
+export const getAvatarFromRequest = (req) => {
   if (!req.file) return;
 
   const baseUrl = `${req.protocol}://${req.get("host")}`;

@@ -6,6 +6,7 @@ import {
   getUsers,
   createUser,
   getUserById,
+  updateUserById,
   getUserBySession,
 } from "@/controllers/users";
 import { catchErrors } from "@/middlewares/error";
@@ -19,6 +20,11 @@ router.use(verifySession());
 router.get("/", catchErrors(getUsers));
 router.post("/", upload.single("avatar"), catchErrors(createUser));
 router.get("/user-by-id/:id", catchErrors(getUserById));
+router.put(
+  "/user-by-id/:id",
+  upload.single("avatar"),
+  catchErrors(updateUserById)
+);
 router.get("/user-by-session", catchErrors(getUserBySession));
 
 export default router;

@@ -1,7 +1,8 @@
 import Passwordless from "supertokens-node/recipe/passwordless";
 
 import { User } from "@/db/models/User";
-import { getFileUrlFromRequest } from "@/utils/getFileUrlFromRequest";
+import { deleteAvatar } from "@/utils/avatar/deleteAvatar";
+import { getAvatarFromRequest } from "@/utils/avatar/getAvatarFromRequest";
 import { sendMail } from "@/utils/sendMail";
 
 export const checkUserExistenceByEmail = async (req, res) => {
@@ -24,7 +25,7 @@ export const createUser = async (req, res) => {
     name,
     email,
     role,
-    avatar: getFileUrlFromRequest(req),
+    avatar: getAvatarFromRequest(req),
   });
 
   if (notifyRegistration) {
@@ -41,14 +42,41 @@ export const createUser = async (req, res) => {
 export const getUserById = async (req, res) => {
   const { id } = req.params;
 
-  const user = await User.findOne({ id });
-
+  const user = await User.findById(id);
   if (!user) {
     res.status(404).send({ message: "User not found" });
     return;
   }
 
   res.status(200).send(user);
+};
+
+export const updateUserById = async (req, res) => {
+  const { id } = req.params;
+  const { name, email, role, avatar: avatarInput } = req.body;
+
+  const user = await User.findById(id);
+  if (!user) {
+    res.status(404).send({ message: "User not found" });
+    return;
+  }
+
+  const avatar = getAvatarFromRequest(req) ?? avatarInput;
+  const updatedUser = await User.findByIdAndUpdate(
+    id,
+    {
+      name,
+      email,
+      role,
+      ...(avatar ? { avatar } : { $unset: { avatar: 1 } }),
+    },
+    { new: true }
+  );
+
+  // delete outdated avatar
+  if (!avatarInput) await deleteAvatar(user.avatar);
+
+  res.status(200).send(updatedUser);
 };
 
 export const getUserBySession = async (req, res) => {
