@@ -82,7 +82,12 @@ export const updateUserById = async (req, res) => {
 export const getUserBySession = async (req, res) => {
   const userId = req.session.getUserId();
   const { email } = await Passwordless.getUserById({ userId });
+
   const user = await User.findOne({ email });
+  if (!user) {
+    res.status(404).send({ message: "User not found" });
+    return;
+  }
 
   res.status(200).send(user);
 };
