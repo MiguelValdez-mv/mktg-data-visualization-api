@@ -1,18 +1,88 @@
 import Passwordless from "supertokens-node/recipe/passwordless";
 
-import { Users } from "@/db/models/Users";
+import { User } from "@/db/models/User";
+import { deleteAvatar } from "@/utils/avatar/deleteAvatar";
+import { getAvatarFromRequest } from "@/utils/avatar/getAvatarFromRequest";
+import { sendMail } from "@/utils/sendMail";
 
 export const checkUserExistenceByEmail = async (req, res) => {
   const { email } = req.query;
-  const user = await Users.findOne({ email });
+  const user = await User.findOne({ email });
 
   res.status(200).send(!!user);
 };
 
-export const getUserDetailsFromSupertokensId = async (req, res) => {
+export const getUsers = async (req, res) => {
+  const users = await User.find();
+
+  res.status(200).send(users);
+};
+
+export const createUser = async (req, res) => {
+  const { name, email, role, notifyRegistration } = req.body;
+
+  const newUser = await User.create({
+    name,
+    email,
+    role,
+    avatar: getAvatarFromRequest(req),
+  });
+
+  if (notifyRegistration) {
+    await sendMail({
+      to: email,
+      subject: "¡Bienvenid@!",
+      text: `Hola ${name}, \n\nSu cuenta fue registrada exitosamente. Su email de acceso es: ${email}`,
+    });
+  }
+
+  res.status(200).send(newUser);
+};
+
+export const getUserById = async (req, res) => {
+  const { id } = req.params;
+
+  const user = await User.findById(id);
+  if (!user) {
+    res.status(404).send({ message: "User not found" });
+    return;
+  }
+
+  res.status(200).send(user);
+};
+
+export const updateUserById = async (req, res) => {
+  const { id } = req.params;
+  const { name, email, role, avatar: avatarInput } = req.body;
+
+  const user = await User.findById(id);
+  if (!user) {
+    res.status(404).send({ message: "User not found" });
+    return;
+  }
+
+  const avatar = getAvatarFromRequest(req) ?? avatarInput;
+  const updatedUser = await User.findByIdAndUpdate(
+    id,
+    {
+      name,
+      email,
+      role,
+      ...(avatar ? { avatar } : { $unset: { avatar: 1 } }),
+    },
+    { new: true }
+  );
+
+  // delete outdated avatar
+  if (!avatarInput) await deleteAvatar(user.avatar);
+
+  res.status(200).send(updatedUser);
+};
+
+export const getUserBySession = async (req, res) => {
   const userId = req.session.getUserId();
   const { email } = await Passwordless.getUserById({ userId });
-  const userDetails = await Users.findOne({ email });
+  const user = await User.findOne({ email });
 
-  res.status(200).send(userDetails);
+  res.status(200).send(user);
 };
