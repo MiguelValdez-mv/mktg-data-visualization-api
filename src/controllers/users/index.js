@@ -7,6 +7,7 @@ import { sendMail } from "@/utils/sendMail";
 
 export const checkUserExistenceByEmail = async (req, res) => {
   const { email } = req.query;
+
   const user = await User.findOne({ email });
 
   res.status(200).send(!!user);
@@ -21,28 +22,31 @@ export const getUsers = async (req, res) => {
 export const createUser = async (req, res) => {
   const { name, email, role, notifyRegistration } = req.body;
 
-  const newUser = await User.create({
-    name,
-    email,
-    role,
-    avatar: getAvatarFromRequest(req),
-  });
+  const sendNotificationMail = notifyRegistration === "true";
 
-  if (notifyRegistration) {
-    await sendMail({
-      to: email,
-      subject: "¡Bienvenid@!",
-      text: `Hola ${name}, \n\nSu cuenta fue registrada exitosamente. Su email de acceso es: ${email}`,
-    });
-  }
+  const [user] = await Promise.all([
+    User.create({
+      name,
+      email,
+      role,
+      avatar: getAvatarFromRequest(req),
+    }),
+    sendNotificationMail &&
+      sendMail({
+        to: email,
+        subject: "¡Bienvenid@!",
+        text: `Hola ${name}, \n\nSu cuenta fue registrada exitosamente. Su email de acceso es: ${email}`,
+      }),
+  ]);
 
-  res.status(200).send(newUser);
+  res.status(200).send(user);
 };
 
 export const getUserById = async (req, res) => {
   const { id } = req.params;
 
   const user = await User.findById(id);
+
   if (!user) {
     res.status(404).send({ message: "User not found" });
     return;
@@ -53,28 +57,31 @@ export const getUserById = async (req, res) => {
 
 export const updateUserById = async (req, res) => {
   const { id } = req.params;
-  const { name, email, role, avatar: avatarInput } = req.body;
 
   const user = await User.findById(id);
+
   if (!user) {
     res.status(404).send({ message: "User not found" });
     return;
   }
 
+  const { name, email, role, avatar: avatarInput } = req.body;
   const avatar = getAvatarFromRequest(req) ?? avatarInput;
-  const updatedUser = await User.findByIdAndUpdate(
-    id,
-    {
-      name,
-      email,
-      role,
-      ...(avatar ? { avatar } : { $unset: { avatar: 1 } }),
-    },
-    { new: true }
-  );
+  const deleteOutdatedAvatar = !avatarInput;
 
-  // delete outdated avatar
-  if (!avatarInput) await deleteAvatar(user.avatar);
+  const [updatedUser] = await Promise.all([
+    User.findByIdAndUpdate(
+      id,
+      {
+        name,
+        email,
+        role,
+        ...(avatar ? { avatar } : { $unset: { avatar: 1 } }),
+      },
+      { new: true }
+    ),
+    deleteOutdatedAvatar && deleteAvatar(user.avatar),
+  ]);
 
   res.status(200).send(updatedUser);
 };
@@ -84,10 +91,6 @@ export const getUserBySession = async (req, res) => {
   const { email } = await Passwordless.getUserById({ userId });
 
   const user = await User.findOne({ email });
-  if (!user) {
-    res.status(404).send({ message: "User not found" });
-    return;
-  }
 
   res.status(200).send(user);
 };
