@@ -1,8 +1,7 @@
 import Passwordless from "supertokens-node/recipe/passwordless";
 
 import { User } from "@/db/models/User";
-import { deleteAvatar } from "@/utils/avatar/deleteAvatar";
-import { getAvatarFromRequest } from "@/utils/avatar/getAvatarFromRequest";
+import { getAvatarFromRequest } from "@/utils/getAvatarFromRequest";
 import { sendMail } from "@/utils/sendMail";
 
 export const checkUserExistenceByEmail = async (req, res) => {
@@ -17,6 +16,14 @@ export const getUsers = async (req, res) => {
   const users = await User.find();
 
   res.status(200).send(users);
+};
+
+export const deleteUsers = async (req, res) => {
+  const ids = req.query.ids.split(",");
+
+  const result = await User.deleteMany({ _id: { $in: ids } });
+
+  res.status(200).send(result);
 };
 
 export const createUser = async (req, res) => {
@@ -67,21 +74,17 @@ export const updateUserById = async (req, res) => {
 
   const { name, email, role, avatar: avatarInput } = req.body;
   const avatar = getAvatarFromRequest(req) ?? avatarInput;
-  const deleteOutdatedAvatar = !avatarInput;
 
-  const [updatedUser] = await Promise.all([
-    User.findByIdAndUpdate(
-      id,
-      {
-        name,
-        email,
-        role,
-        ...(avatar ? { avatar } : { $unset: { avatar: 1 } }),
-      },
-      { new: true }
-    ),
-    deleteOutdatedAvatar && deleteAvatar(user.avatar),
-  ]);
+  const updatedUser = await User.findByIdAndUpdate(
+    id,
+    {
+      name,
+      email,
+      role,
+      ...(avatar ? { avatar } : { $unset: { avatar: 1 } }),
+    },
+    { new: true }
+  );
 
   res.status(200).send(updatedUser);
 };

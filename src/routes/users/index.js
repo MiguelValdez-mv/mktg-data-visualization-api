@@ -4,6 +4,7 @@ import { verifySession } from "supertokens-node/recipe/session/framework/express
 import {
   checkUserExistenceByEmail,
   getUsers,
+  deleteUsers,
   createUser,
   getUserById,
   updateUserById,
@@ -17,14 +18,18 @@ const router = express.Router();
 router.get("/user-by-email-exists", catchErrors(checkUserExistenceByEmail));
 
 router.use(verifySession());
+
 router.get("/", catchErrors(getUsers));
+router.delete("/", catchErrors(deleteUsers));
 router.post("/", upload.single("avatar"), catchErrors(createUser));
+
 router.get("/user-by-id/:id", catchErrors(getUserById));
 router.put(
   "/user-by-id/:id",
   upload.single("avatar"),
   catchErrors(updateUserById)
 );
+
 router.get("/user-by-session", catchErrors(getUserBySession));
 
 export default router;
