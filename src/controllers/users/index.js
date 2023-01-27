@@ -65,13 +65,6 @@ export const getUserById = async (req, res) => {
 export const updateUserById = async (req, res) => {
   const { id } = req.params;
 
-  const user = await User.findById(id);
-
-  if (!user) {
-    res.status(404).send({ message: "User not found" });
-    return;
-  }
-
   const { name, email, role, avatar: avatarInput } = req.body;
   const avatar = getAvatarFromRequest(req) ?? avatarInput;
 
