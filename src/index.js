@@ -9,6 +9,7 @@ import { middleware } from "supertokens-node/framework/express";
 import { ENV } from "@/constants";
 import { connectDb } from "@/db";
 import { errorHandler } from "@/middlewares/error";
+import businessesRoutes from "@/routes/businesses";
 import usersRoutes from "@/routes/users";
 import { startSupertokens } from "@/thirdParty/supertokens";
 
@@ -33,6 +34,7 @@ app.use("/uploads", express.static(path.join(__dirname, "./uploads")));
 
 // Routes
 app.use("/users", usersRoutes);
+app.use("/businesses", businessesRoutes);
 
 // Error handling
 app.use(errorHandler);

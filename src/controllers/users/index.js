@@ -13,7 +13,7 @@ export const checkUserExistenceByEmail = async (req, res) => {
 };
 
 export const getUsers = async (req, res) => {
-  const users = await User.find();
+  const users = await User.find(req.query ?? {});
 
   res.status(200).send(users);
 };
