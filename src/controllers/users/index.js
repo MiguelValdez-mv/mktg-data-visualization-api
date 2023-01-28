@@ -5,7 +5,7 @@ import { getAvatarFromRequest } from "@/utils/getAvatarFromRequest";
 import { sendMail } from "@/utils/sendMail";
 
 export const checkUserExistenceByEmail = async (req, res) => {
-  const { email } = req.query;
+  const { email } = req.params;
 
   const user = await User.findOne({ email });
 

@@ -58,6 +58,39 @@ export const updateBusinessById = async (req, res) => {
   res.status(200).send(updatedBusiness);
 };
 
+export const addEmployeesToBusiness = async (req, res) => {
+  const { id } = req.params;
+  const { employeeIds } = req.body;
+
+  const updatedBusiness = await Business.findByIdAndUpdate(
+    id,
+    {
+      $push: {
+        employeeIds: { $each: employeeIds },
+      },
+    },
+    { new: true }
+  );
+
+  res.status(200).send(updatedBusiness);
+};
+
+export const deleteBusinessEmployees = async (req, res) => {
+  const { id } = req.params;
+
+  const employeeIds = req.query.employeeIds.split(",");
+
+  const updatedBusiness = await Business.findByIdAndUpdate(
+    id,
+    {
+      $pullAll: { employeeIds },
+    },
+    { new: true }
+  );
+
+  res.status(200).send(updatedBusiness);
+};
+
 export const getBusinessesByUserId = async (req, res) => {
   const { id } = req.params;
 

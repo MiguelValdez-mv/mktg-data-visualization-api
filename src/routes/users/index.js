@@ -15,7 +15,10 @@ import { upload } from "@/middlewares/upload";
 
 const router = express.Router();
 
-router.get("/user-by-email-exists", catchErrors(checkUserExistenceByEmail));
+router.get(
+  "/user-by-email-exists/:email",
+  catchErrors(checkUserExistenceByEmail)
+);
 
 router.use(verifySession());
 

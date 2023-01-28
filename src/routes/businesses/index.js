@@ -6,6 +6,8 @@ import {
   deleteBusinesses,
   getBusinessById,
   updateBusinessById,
+  addEmployeesToBusiness,
+  deleteBusinessEmployees,
   getBusinessesByUserId,
 } from "@/controllers/businesses";
 import { catchErrors } from "@/middlewares/error";
@@ -23,6 +25,15 @@ router.put(
   "/business-by-id/:id",
   upload.single("avatar"),
   catchErrors(updateBusinessById)
+);
+
+router.put(
+  "/business-by-id/:id/employees",
+  catchErrors(addEmployeesToBusiness)
+);
+router.delete(
+  "/business-by-id/:id/employees",
+  catchErrors(deleteBusinessEmployees)
 );
 
 router.get("/businesses-by-user-id/:id", catchErrors(getBusinessesByUserId));
