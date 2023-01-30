@@ -1,9 +1,8 @@
-/* eslint-disable */
 import mongoose from "mongoose";
 
 import { USER_ROLES } from "@/constants";
-
-import { Business } from "../Business";
+import { Business } from "@/db/models/Business";
+import { isOwnerUser, isEmployeeUser } from "@/utils/checkUserRole";
 
 const userSchema = new mongoose.Schema(
   {
@@ -25,22 +24,42 @@ userSchema.pre("findOneAndUpdate", async function () {
     return;
   }
 
-  if (user.role === USER_ROLES.OWNER) {
+  if (isOwnerUser(user)) {
     await Business.deleteMany({ ownerId: user._id });
     return;
   }
 
-  if (user.role === USER_ROLES.EMPLOYEE) {
+  if (isEmployeeUser(user)) {
     await Business.updateMany({}, { $pull: { employeeIds: user._id } });
   }
 });
 
 userSchema.pre("deleteMany", async function () {
   const users = await this.model.find(this.getFilter());
-  const ids = users.map(({ _id }) => _id);
 
-  await Business.deleteMany({ ownerId: { $in: ids } });
-  await Business.updateMany({}, { $pullAll: { employeeIds: ids } });
+  const { ownerIds, employeeIds } = users.reduce(
+    (acum, curr) => {
+      if (isOwnerUser(curr)) {
+        return {
+          ...acum,
+          ownerIds: [...acum.ownerIds, curr._id],
+        };
+      }
+
+      if (isEmployeeUser(curr)) {
+        return {
+          ...acum,
+          employeeIds: [...acum.employeeIds, curr._id],
+        };
+      }
+
+      return acum;
+    },
+    { ownerIds: [], employeeIds: [] }
+  );
+
+  await Business.deleteMany({ ownerId: { $in: ownerIds } });
+  await Business.updateMany({}, { $pullAll: { employeeIds } });
 });
 
 export const User = mongoose.model("User", userSchema);
