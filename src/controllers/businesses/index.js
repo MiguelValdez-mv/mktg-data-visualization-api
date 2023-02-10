@@ -2,6 +2,14 @@ import { Business } from "@/db/models/Business";
 import { User } from "@/db/models/User";
 import { getAvatarFromRequest } from "@/utils/getAvatarFromRequest";
 
+export const deleteBusinesses = async (req, res) => {
+  const ids = req.query.ids.split(",");
+
+  const result = await Business.deleteMany({ _id: { $in: ids } });
+
+  res.status(200).send(result);
+};
+
 export const createBusiness = async (req, res) => {
   const { name, type, description, ownerId } = req.body;
 
@@ -14,14 +22,6 @@ export const createBusiness = async (req, res) => {
   });
 
   res.status(200).send(business);
-};
-
-export const deleteBusinesses = async (req, res) => {
-  const ids = req.query.ids.split(",");
-
-  const result = await Business.deleteMany({ _id: { $in: ids } });
-
-  res.status(200).send(result);
 };
 
 export const getBusinessById = async (req, res) => {

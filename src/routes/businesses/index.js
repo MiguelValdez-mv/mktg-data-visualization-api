@@ -2,8 +2,8 @@ import express from "express";
 import { verifySession } from "supertokens-node/recipe/session/framework/express";
 
 import {
-  createBusiness,
   deleteBusinesses,
+  createBusiness,
   getBusinessById,
   updateBusinessById,
   addEmployeesToBusiness,
@@ -17,8 +17,8 @@ const router = express.Router();
 
 router.use(verifySession());
 
-router.post("/", upload.single("avatar"), catchErrors(createBusiness));
 router.delete("/", catchErrors(deleteBusinesses));
+router.post("/", upload.single("avatar"), catchErrors(createBusiness));
 
 router.get("/business-by-id/:id", catchErrors(getBusinessById));
 router.put(
