@@ -10,6 +10,14 @@ export const getConnections = async (req, res) => {
   res.status(200).send(connections);
 };
 
+export const deleteConnections = async (req, res) => {
+  const ids = req.query.ids.split(",");
+
+  const result = await Connection.deleteMany({ _id: { $in: ids } });
+
+  res.status(200).send(result);
+};
+
 export const createConnection = async (req, res) => {
   const { type, code, accessToken } = req.body;
 
