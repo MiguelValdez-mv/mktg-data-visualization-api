@@ -11,6 +11,7 @@ import { connectDb } from "@/db";
 import { errorHandler } from "@/middlewares/error";
 import businessesRoutes from "@/routes/businesses";
 import connectionsRoutes from "@/routes/connections";
+import panelsRoutes from "@/routes/panels";
 import usersRoutes from "@/routes/users";
 import { startSupertokens } from "@/thirdParty/supertokens";
 
@@ -37,6 +38,7 @@ app.use("/uploads", express.static(path.join(__dirname, "./uploads")));
 app.use("/users", usersRoutes);
 app.use("/businesses", businessesRoutes);
 app.use("/connections", connectionsRoutes);
+app.use("/panels", panelsRoutes);
 
 // Error handling
 app.use(errorHandler);
