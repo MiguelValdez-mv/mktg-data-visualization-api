@@ -1,5 +1,6 @@
 import { Business } from "@/db/models/Business";
 import { User } from "@/db/models/User";
+import { isAdminUser, isOwnerUser } from "@/utils/checkUserRole";
 import { getAvatarFromRequest } from "@/utils/getAvatarFromRequest";
 
 export const deleteBusinesses = async (req, res) => {
@@ -101,13 +102,11 @@ export const getBusinessesByUserId = async (req, res) => {
     return;
   }
 
-  const QUERY_BY_USER_ROLE = {
-    ADMIN: {},
-    OWNER: { ownerId: id },
-    EMPLOYEE: { employeeIds: id },
-  };
-
-  const businesses = await Business.find(QUERY_BY_USER_ROLE[user.role]);
+  const businesses = await Business.find({
+    ...(isAdminUser(user)
+      ? {}
+      : { [isOwnerUser(user) ? "ownerId" : "employeeIds"]: id }),
+  });
 
   res.status(200).send(businesses);
 };
