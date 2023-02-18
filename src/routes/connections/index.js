@@ -5,6 +5,7 @@ import {
   getConnections,
   deleteConnections,
   createConnection,
+  getConnectionsMetadata,
 } from "@/controllers/connections/";
 import { catchErrors } from "@/middlewares/error";
 
@@ -15,5 +16,7 @@ router.use(verifySession());
 router.get("/", catchErrors(getConnections));
 router.delete("/", catchErrors(deleteConnections));
 router.post("/", catchErrors(createConnection));
+
+router.get("/metadata", catchErrors(getConnectionsMetadata));
 
 export default router;

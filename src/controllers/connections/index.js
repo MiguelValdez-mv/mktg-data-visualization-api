@@ -1,6 +1,6 @@
 import { FacebookAdsApi } from "facebook-nodejs-business-sdk";
 
-import { CONNECTION_TYPES, ENV } from "@/constants";
+import { CONNECTION_TYPES, ENV, GA_METRICS, GA_DIMENSIONS } from "@/constants";
 import { Connection } from "@/db/models/Connection";
 import { googleOAuth2Client } from "@/thirdParty/googleAuth";
 
@@ -84,4 +84,13 @@ export const createConnection = async (req, res) => {
   const connection = await Connection.create(connectionParams);
 
   res.status(200).send(connection);
+};
+
+export const getConnectionsMetadata = async (req, res) => {
+  res.status(200).send({
+    [CONNECTION_TYPES.GOOGLE_ANALYTICS]: {
+      metrics: GA_METRICS,
+      dimensions: GA_DIMENSIONS,
+    },
+  });
 };
