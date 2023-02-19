@@ -1,8 +1,9 @@
-import { FacebookAdsApi } from "facebook-nodejs-business-sdk";
+import { AnalyticsAdminServiceClient } from "@google-analytics/admin";
+import { FacebookAdsApi, User, AdAccount } from "facebook-nodejs-business-sdk";
 
 import { CONNECTION_TYPES, ENV, GA_METRICS, GA_DIMENSIONS } from "@/constants";
 import { Connection } from "@/db/models/Connection";
-import { googleOAuth2Client } from "@/thirdParty/googleAuth";
+import { getGoogleOAuth2Client } from "@/thirdParty/googleAuth";
 
 export const getConnections = async (req, res) => {
   const connections = await Connection.find();
@@ -24,6 +25,7 @@ export const createConnection = async (req, res) => {
   let connectionParams;
   switch (type) {
     case CONNECTION_TYPES.GOOGLE_ANALYTICS: {
+      const googleOAuth2Client = getGoogleOAuth2Client();
       const { tokens } = await googleOAuth2Client.getToken(code);
       const { refresh_token: refreshToken } = tokens;
 
@@ -87,10 +89,81 @@ export const createConnection = async (req, res) => {
 };
 
 export const getConnectionsMetadata = async (req, res) => {
-  res.status(200).send({
+  const connections = await Connection.find();
+
+  let { properties, adAccounts } = connections.reduce(
+    (acum, curr) => {
+      const { type, accessToken, refreshToken, userId } = curr;
+
+      switch (type) {
+        case CONNECTION_TYPES.GOOGLE_ANALYTICS: {
+          const getProperties = async () => {
+            const googleOAuth2Client = getGoogleOAuth2Client();
+
+            googleOAuth2Client.setCredentials({ refresh_token: refreshToken });
+
+            const analyticsAdminClient = new AnalyticsAdminServiceClient({
+              authClient: googleOAuth2Client,
+            });
+
+            const [accounts] =
+              await analyticsAdminClient.listAccountSummaries();
+
+            return Promise.resolve(
+              accounts
+                .flatMap((acc) => acc.propertySummaries)
+                .map((prop) => ({
+                  id: prop.property.replace("properties/", ""),
+                  name: prop.displayName,
+                }))
+            );
+          };
+
+          return {
+            ...acum,
+            properties: [...acum.properties, getProperties()],
+          };
+        }
+        case CONNECTION_TYPES.FACEBOOK_ADS: {
+          FacebookAdsApi.init(accessToken);
+
+          const user = new User(userId);
+
+          return {
+            ...acum,
+            adAccounts: [
+              ...acum.adAccounts,
+              user.getAdAccounts([AdAccount.Fields.id, AdAccount.Fields.name]),
+            ],
+          };
+        }
+        default: {
+          return acum;
+        }
+      }
+    },
+    {
+      properties: [],
+      adAccounts: [],
+    }
+  );
+
+  properties = (await Promise.all(properties)).flat();
+
+  adAccounts = (await Promise.all(adAccounts))
+    .flat()
+    .map(({ _data: { id, name } }) => ({ id: id.replace("act_", ""), name }));
+
+  const connectionsMetadata = {
     [CONNECTION_TYPES.GOOGLE_ANALYTICS]: {
       metrics: GA_METRICS,
       dimensions: GA_DIMENSIONS,
+      selectors: properties,
     },
-  });
+    [CONNECTION_TYPES.FACEBOOK_ADS]: {
+      selectors: adAccounts,
+    },
+  };
+
+  res.status(200).send(connectionsMetadata);
 };

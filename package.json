@@ -26,6 +26,7 @@
     "prettier": "^2.7.1"
   },
   "dependencies": {
+    "@google-analytics/admin": "^4.5.1",
     "consola": "^2.15.3",
     "cors": "^2.8.5",
     "dotenv": "^16.0.3",
