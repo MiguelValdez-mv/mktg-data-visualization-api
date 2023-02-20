@@ -156,9 +156,9 @@ export const getConnectionsMetadata = async (req, res) => {
 
   const connectionsMetadata = {
     [CONNECTION_TYPES.GOOGLE_ANALYTICS]: {
+      selectors: properties,
       metrics: GA_METRICS,
       dimensions: GA_DIMENSIONS,
-      selectors: properties,
     },
     [CONNECTION_TYPES.FACEBOOK_ADS]: {
       selectors: adAccounts,

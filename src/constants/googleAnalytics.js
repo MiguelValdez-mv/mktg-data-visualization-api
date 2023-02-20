@@ -152,19 +152,19 @@ export const GA_METRICS = [
   {
     name: "promotionClicks",
     copy: {
-      spanish: "Artículos en los que se ha hecho clic en la promoción",
+      spanish: "Clics en promociones",
     },
   },
   {
     name: "promotionViews",
     copy: {
-      spanish: "Artículos vistos en la promoción",
+      spanish: "Vistas de promociones",
     },
   },
   {
     name: "purchaseRevenue",
     copy: {
-      spanish: "Ingresos derivados de las compras",
+      spanish: "Ingresos de compras",
     },
   },
   {
@@ -395,25 +395,25 @@ export const GA_DIMENSIONS = [
   {
     name: "firstUserDefaultChannelGroup",
     copy: {
-      spanish: "Primer grupo de canales predeterminado del usuario",
+      spanish: "1er grupo de canales pred. del usuario",
     },
   },
   {
     name: "firstUserGoogleAdsAdGroupId",
     copy: {
-      spanish: "ID del primer grupo de anuncios de Google Ads del usuario",
+      spanish: "ID 1er grupo de anuncios de G.Ads del usuario",
     },
   },
   {
     name: "firstUserGoogleAdsAdGroupName",
     copy: {
-      spanish: "Primer nombre del grupo de anuncios de Google Ads del usuario",
+      spanish: "1er nombre grupo de anuncios de G.Ads del usuario",
     },
   },
   {
     name: "firstUserGoogleAdsAdNetworkType",
     copy: {
-      spanish: "Primer tipo de red publicitaria de Google Ads del usuario",
+      spanish: "1er tipo red pub. de G.Ads del usuario",
     },
   },
   {
@@ -431,7 +431,7 @@ export const GA_DIMENSIONS = [
   {
     name: "firstUserGoogleAdsKeyword",
     copy: {
-      spanish: "Texto de palabras clave de Google Ads del primer usuario",
+      spanish: "Keyword de G.Ads del 1er usuario",
     },
   },
   {
@@ -455,7 +455,7 @@ export const GA_DIMENSIONS = [
   {
     name: "googleAdsKeyword",
     copy: {
-      spanish: "Texto de palabra clave de Google Ads",
+      spanish: "Keyword de Google Ads",
     },
   },
   {
@@ -719,7 +719,7 @@ export const GA_DIMENSIONS = [
   {
     name: "sessionGoogleAdsKeyword",
     copy: {
-      spanish: "Texto de palabras clave de Google Ads de la sesión",
+      spanish: "Keyboard de Google Ads de la sesión",
     },
   },
   {
