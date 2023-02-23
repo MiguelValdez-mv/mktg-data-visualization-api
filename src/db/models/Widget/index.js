@@ -1,6 +1,17 @@
 import mongoose from "mongoose";
 
-import { TIME_UNITS } from "@/constants";
+import { TIME_UNITS, CHART_TYPES, OPERATORS } from "@/constants";
+
+const selectorSchema = new mongoose.Schema({
+  // property id (ga4) or id of the ad account (facebook ads)
+  _id: { type: String, required: true },
+  name: { type: String, required: true },
+  connectionId: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "Connection",
+    required: true,
+  },
+});
 
 const timeSchema = new mongoose.Schema({
   amount: {
@@ -14,11 +25,46 @@ const timeSchema = new mongoose.Schema({
   },
 });
 
+const filterSchema = new mongoose.Schema({
+  field: { type: String, required: true },
+  operator: {
+    type: String,
+    enum: Object.values(OPERATORS),
+    required: true,
+  },
+  operand: { type: String, required: true },
+});
+
+const layoutSchema = new mongoose.Schema({
+  x: { type: Number, required: true },
+  y: { type: Number, required: true },
+  w: { type: Number, required: true },
+  h: { type: Number, required: true },
+});
+
 const widgetSchema = new mongoose.Schema(
   {
-    title: { type: String },
+    panelId: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Panel",
+      required: true,
+    },
+    selector: { type: selectorSchema, required: true },
+    metricName: { type: String, required: true },
+    charType: {
+      type: String,
+      enum: Object.values(CHART_TYPES),
+      required: true,
+    },
+    dimensionName: { type: String, required: true },
     timespan: {
       type: timeSchema,
+      required: true,
+    },
+    title: { type: String },
+    filters: [{ type: filterSchema }],
+    layout: {
+      type: layoutSchema,
       required: true,
     },
   },

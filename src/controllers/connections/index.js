@@ -100,7 +100,13 @@ export const getConnectionsMetadata = async (req, res) => {
 
   let { properties, adAccounts } = connections.reduce(
     (acum, curr) => {
-      const { type, accessToken, refreshToken, userId } = curr;
+      const {
+        _id: connectionId,
+        type,
+        accessToken,
+        refreshToken,
+        userId,
+      } = curr;
 
       switch (type) {
         case CONNECTION_TYPES.GOOGLE_ANALYTICS: {
@@ -119,9 +125,10 @@ export const getConnectionsMetadata = async (req, res) => {
             return Promise.resolve(
               accounts
                 .flatMap((acc) => acc.propertySummaries)
-                .map((prop) => ({
-                  id: prop.property,
-                  name: prop.displayName,
+                .map(({ property, displayName }) => ({
+                  _id: property,
+                  name: displayName,
+                  connectionId,
                 }))
             );
           };
@@ -132,16 +139,24 @@ export const getConnectionsMetadata = async (req, res) => {
           };
         }
         case CONNECTION_TYPES.FACEBOOK_ADS: {
-          FacebookAdsApi.init(accessToken);
+          const getAdAccounts = async () => {
+            FacebookAdsApi.init(accessToken);
 
-          const user = new User(userId);
+            const user = new User(userId);
+
+            return Promise.resolve(
+              (
+                await user.getAdAccounts([
+                  AdAccount.Fields.id,
+                  AdAccount.Fields.name,
+                ])
+              ).map(({ id: _id, name }) => ({ _id, name, connectionId }))
+            );
+          };
 
           return {
             ...acum,
-            adAccounts: [
-              ...acum.adAccounts,
-              user.getAdAccounts([AdAccount.Fields.id, AdAccount.Fields.name]),
-            ],
+            adAccounts: [...acum.adAccounts, getAdAccounts()],
           };
         }
         default: {
@@ -157,14 +172,12 @@ export const getConnectionsMetadata = async (req, res) => {
 
   properties = (await Promise.all(properties)).flat();
 
-  adAccounts = (await Promise.all(adAccounts))
-    .flat()
-    .map(({ id, name }) => ({ id, name }));
+  adAccounts = (await Promise.all(adAccounts)).flat();
 
   const removeDuplicateSelectors = (selectors) =>
     selectors.filter(
       (selector, idx, arr) =>
-        idx === arr.findIndex((curr) => curr.id === selector.id)
+        idx === arr.findIndex((curr) => curr._id === selector._id)
     );
 
   const connectionsMetadata = {
