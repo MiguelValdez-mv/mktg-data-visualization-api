@@ -1,7 +1,14 @@
 import { AnalyticsAdminServiceClient } from "@google-analytics/admin";
 import { FacebookAdsApi, User, AdAccount } from "facebook-nodejs-business-sdk";
 
-import { CONNECTION_TYPES, ENV, GA_METRICS, GA_DIMENSIONS } from "@/constants";
+import {
+  CONNECTION_TYPES,
+  ENV,
+  GA_METRICS,
+  GA_DIMENSIONS,
+  FB_ADS_METRICS,
+  FB_ADS_DIMENSIONS,
+} from "@/constants";
 import { Connection } from "@/db/models/Connection";
 import { getGoogleOAuth2Client } from "@/thirdParty/googleAuth";
 
@@ -162,6 +169,8 @@ export const getConnectionsMetadata = async (req, res) => {
     },
     [CONNECTION_TYPES.FACEBOOK_ADS]: {
       selectors: adAccounts,
+      metrics: FB_ADS_METRICS,
+      dimensions: FB_ADS_DIMENSIONS,
     },
   };
 
