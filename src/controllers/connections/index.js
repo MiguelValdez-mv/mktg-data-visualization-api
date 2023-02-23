@@ -120,7 +120,7 @@ export const getConnectionsMetadata = async (req, res) => {
               accounts
                 .flatMap((acc) => acc.propertySummaries)
                 .map((prop) => ({
-                  id: prop.property.replace("properties/", ""),
+                  id: prop.property,
                   name: prop.displayName,
                 }))
             );
@@ -159,16 +159,22 @@ export const getConnectionsMetadata = async (req, res) => {
 
   adAccounts = (await Promise.all(adAccounts))
     .flat()
-    .map(({ _data: { id, name } }) => ({ id: id.replace("act_", ""), name }));
+    .map(({ id, name }) => ({ id, name }));
+
+  const removeDuplicateSelectors = (selectors) =>
+    selectors.filter(
+      (selector, idx, arr) =>
+        idx === arr.findIndex((curr) => curr.id === selector.id)
+    );
 
   const connectionsMetadata = {
     [CONNECTION_TYPES.GOOGLE_ANALYTICS]: {
-      selectors: properties,
+      selectors: removeDuplicateSelectors(properties),
       metrics: GA_METRICS,
       dimensions: GA_DIMENSIONS,
     },
     [CONNECTION_TYPES.FACEBOOK_ADS]: {
-      selectors: adAccounts,
+      selectors: removeDuplicateSelectors(adAccounts),
       metrics: FB_ADS_METRICS,
       dimensions: FB_ADS_DIMENSIONS,
     },
