@@ -225,21 +225,21 @@ export const FB_ADS_METRICS = [
 
 export const FB_ADS_DIMENSIONS = [
   {
-    name: "ad",
+    name: "ad_name",
     copy: {
-      spanish: "Anuncio",
+      spanish: "Nombre del anuncio",
     },
   },
   {
-    name: "adset",
+    name: "adset_name",
     copy: {
-      spanish: "Conjunto de anuncios",
+      spanish: "Nombre del conjunto de anuncios",
     },
   },
   {
-    name: "campaign",
+    name: "campaign_name",
     copy: {
-      spanish: "Campaña",
+      spanish: "Nombre de la campaña",
     },
   },
 ];

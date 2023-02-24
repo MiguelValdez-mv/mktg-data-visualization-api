@@ -1717,6 +1717,13 @@
     google-gax "^3.5.2"
     server-destroy "^1.0.1"
 
+"@google-analytics/data@^3.2.1":
+  version "3.2.1"
+  resolved "https://registry.yarnpkg.com/@google-analytics/data/-/data-3.2.1.tgz#ffe9968c1b1409a7d2f2f6d9debcbc5ab873aa38"
+  integrity sha512-xk2VObLqCXvsdgh43ta2xBMDkd7Uu04BJBzgFoEw5/JoS0sxQb5jsiRd8gqYScaY5euU0ZL3V1Q35TSIJzx0cA==
+  dependencies:
+    google-gax "^3.5.2"
+
 "@grpc/grpc-js@~1.8.0":
   version "1.8.9"
   resolved "https://registry.yarnpkg.com/@grpc/grpc-js/-/grpc-js-1.8.9.tgz#84e9167dc80b0c3a98608e14b839458bf0df684d"
@@ -2694,6 +2701,11 @@ dashdash@^1.12.0:
   integrity sha512-jRFi8UDGo6j+odZiEpjazZaWqEal3w/basFjQHQEwVtZJGDpxbH1MeYluwCS8Xq5wmLJooDlMgvVarmWfGM44g==
   dependencies:
     assert-plus "^1.0.0"
+
+date-fns@^2.29.3:
+  version "2.29.3"
+  resolved "https://registry.yarnpkg.com/date-fns/-/date-fns-2.29.3.tgz#27402d2fc67eb442b511b70bbdf98e6411cd68a8"
+  integrity sha512-dDCnyH2WnnKusqvZZ6+jA1O51Ibt8ZMRNkDZdyAyK4YfbDwa/cEmuztzG5pk6hqlp9aSBPYcjOlktquahGwGeA==
 
 dayjs@^1.8.29:
   version "1.11.6"
