@@ -13,34 +13,43 @@ const selectorSchema = new mongoose.Schema({
   },
 });
 
-const timeSchema = new mongoose.Schema({
-  amount: {
-    type: Number,
-    required: true,
+const timeSchema = new mongoose.Schema(
+  {
+    amount: {
+      type: Number,
+      required: true,
+    },
+    unit: {
+      type: String,
+      enum: Object.values(TIME_UNITS),
+      required: true,
+    },
   },
-  unit: {
-    type: String,
-    enum: Object.values(TIME_UNITS),
-    required: true,
-  },
-});
+  { _id: false }
+);
 
-const filterSchema = new mongoose.Schema({
-  field: { type: String, required: true },
-  operator: {
-    type: String,
-    enum: Object.values(OPERATORS),
-    required: true,
+const filterSchema = new mongoose.Schema(
+  {
+    fieldName: { type: String, required: true },
+    operator: {
+      type: String,
+      enum: Object.values(OPERATORS),
+      required: true,
+    },
+    operand: { type: String, required: true },
   },
-  operand: { type: String, required: true },
-});
+  { _id: false }
+);
 
-const layoutSchema = new mongoose.Schema({
-  x: { type: Number, required: true },
-  y: { type: Number, required: true },
-  w: { type: Number, required: true },
-  h: { type: Number, required: true },
-});
+const layoutSchema = new mongoose.Schema(
+  {
+    x: { type: Number, required: true },
+    y: { type: Number, required: true },
+    w: { type: Number, required: true },
+    h: { type: Number, required: true },
+  },
+  { _id: false }
+);
 
 const widgetSchema = new mongoose.Schema(
   {
@@ -51,12 +60,12 @@ const widgetSchema = new mongoose.Schema(
     },
     selector: { type: selectorSchema, required: true },
     metricName: { type: String, required: true },
-    charType: {
+    chartType: {
       type: String,
       enum: Object.values(CHART_TYPES),
       required: true,
     },
-    dimensionName: { type: String, required: true },
+    dimensionName: { type: String },
     timespan: {
       type: timeSchema,
       required: true,
