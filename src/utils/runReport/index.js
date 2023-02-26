@@ -4,8 +4,13 @@ import { CONNECTION_TYPES } from "@/constants";
 import { Connection } from "@/db/models/Connection";
 import { getTimeRange } from "@/utils/getTimeRange";
 
-export const runWidgetReport = async (widget) => {
-  const { selector, metricName, dimensionName, timespan, filters } = widget;
+export const runReport = async ({
+  selector,
+  metricName,
+  dimensionName,
+  timespan,
+  filters,
+}) => {
   const { type, accessToken } = await Connection.findById(
     selector.connectionId
   );

@@ -6,7 +6,8 @@ import {
   deleteConnections,
   createConnection,
   getConnectionsMetadata,
-} from "@/controllers/connections/";
+  createReport,
+} from "@/controllers/connections";
 import { catchErrors } from "@/middlewares/error";
 
 const router = express.Router();
@@ -18,5 +19,7 @@ router.delete("/", catchErrors(deleteConnections));
 router.post("/", catchErrors(createConnection));
 
 router.get("/metadata", catchErrors(getConnectionsMetadata));
+
+router.post("/reports", catchErrors(createReport));
 
 export default router;

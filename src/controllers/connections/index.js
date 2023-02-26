@@ -11,6 +11,7 @@ import {
 } from "@/constants";
 import { Connection } from "@/db/models/Connection";
 import { getGoogleOAuth2Client } from "@/thirdParty/googleAuth";
+import { runReport } from "@/utils/runReport";
 
 export const getConnections = async (req, res) => {
   const connections = await Connection.find();
@@ -194,4 +195,18 @@ export const getConnectionsMetadata = async (req, res) => {
   };
 
   res.status(200).send(connectionsMetadata);
+};
+
+export const createReport = async (req, res) => {
+  const { selector, metricName, dimensionName, timespan, filters } = req.body;
+
+  const report = await runReport({
+    selector,
+    metricName,
+    dimensionName,
+    timespan,
+    filters,
+  });
+
+  res.status(200).send(report);
 };
