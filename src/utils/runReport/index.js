@@ -53,5 +53,5 @@ export const runReport = async ({
     error = e.message;
   }
 
-  return { rows, error };
+  return { type, rows, error };
 };
