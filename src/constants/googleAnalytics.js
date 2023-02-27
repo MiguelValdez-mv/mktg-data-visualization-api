@@ -242,7 +242,7 @@ export const GA_METRICS = [
   {
     name: "userEngagementDuration",
     copy: {
-      spanish: "",
+      spanish: "Duración de interacción del usuario",
     },
   },
 ];

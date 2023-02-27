@@ -1,11 +1,5 @@
 export const FB_ADS_METRICS = [
   {
-    name: "account_currency",
-    copy: {
-      spanish: "Divisa",
-    },
-  },
-  {
     name: "canvas_avg_view_percent",
     copy: {
       spanish: "Porcentaje de visualización de la experiencia instantánea",
@@ -39,12 +33,6 @@ export const FB_ADS_METRICS = [
     name: "clicks",
     copy: {
       spanish: "Clics",
-    },
-  },
-  {
-    name: "conversion_rate_ranking",
-    copy: {
-      spanish: "Clasificación por tasa de conversión",
     },
   },
   {
@@ -102,12 +90,6 @@ export const FB_ADS_METRICS = [
     },
   },
   {
-    name: "engagement_rate_ranking",
-    copy: {
-      spanish: "Clasificación por porcentaje de interación",
-    },
-  },
-  {
     name: "frequency",
     copy: {
       spanish: "Frecuencia",
@@ -135,12 +117,6 @@ export const FB_ADS_METRICS = [
     name: "inline_post_engagement",
     copy: {
       spanish: "Interacciones de publicación en línea",
-    },
-  },
-  {
-    name: "outbound_clicks",
-    copy: {
-      spanish: "Clics salientes",
     },
   },
   {
