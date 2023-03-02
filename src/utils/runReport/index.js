@@ -39,7 +39,7 @@ export const runReport = async ({
         rows = (
           await new AdAccount(selector._id).getInsights(fields, params)
         ).map((row) => ({
-          [metricName]: row[metricName],
+          [metricName]: Number(row[metricName]),
           ...(dimensionName && { [dimensionName]: row[dimensionName] }),
         }));
 
