@@ -29,3 +29,70 @@ export const getWidgetsByPanelId = async (req, res) => {
 
   res.status(200).send(widgets);
 };
+
+export const manageWidgets = async (req, res) => {
+  const { save, update, remove } = req.body;
+
+  const promises = [];
+
+  promises.push(
+    ...save.map(
+      ({
+        panelId,
+        selector,
+        metricName,
+        chartType,
+        dimensionName,
+        timespan,
+        title,
+        filters,
+        layout,
+      }) =>
+        Widget.create({
+          panelId,
+          selector,
+          metricName,
+          chartType,
+          dimensionName,
+          timespan,
+          title,
+          filters,
+          layout,
+        })
+    )
+  );
+
+  promises.push(
+    ...update.map(
+      ({
+        _id,
+        selector,
+        metricName,
+        chartType,
+        dimensionName,
+        timespan,
+        title,
+        filters,
+        layout,
+      }) =>
+        Widget.findByIdAndUpdate(_id, {
+          selector,
+          metricName,
+          chartType,
+          dimensionName,
+          timespan,
+          title,
+          filters,
+          layout,
+        })
+    )
+  );
+
+  promises.push(
+    Widget.deleteMany({ _id: { $in: remove.map(({ _id }) => _id) } })
+  );
+
+  const result = await Promise.all(promises);
+
+  res.status(200).send(result);
+};

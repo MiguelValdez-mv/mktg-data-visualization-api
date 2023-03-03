@@ -1,17 +1,5 @@
 export const FB_ADS_METRICS = [
   {
-    name: "canvas_avg_view_percent",
-    copy: {
-      spanish: "Porcentaje de visualización de la experiencia instantánea",
-    },
-  },
-  {
-    name: "canvas_avg_view_time",
-    copy: {
-      spanish: "Tiempo de visualización de la experiencia instantánea",
-    },
-  },
-  {
     name: "catalog_segment_value_mobile_purchase_roas",
     copy: {
       spanish: "ROAS de compras en la aplicación móvil",
@@ -38,7 +26,7 @@ export const FB_ADS_METRICS = [
   {
     name: "cost_per_inline_link_click",
     copy: {
-      spanish: "Coste por clicks en enlace en línea",
+      spanish: "Coste por clics en enlace en línea",
     },
   },
   {
@@ -120,12 +108,6 @@ export const FB_ADS_METRICS = [
     },
   },
   {
-    name: "quality_ranking",
-    copy: {
-      spanish: "Clasificación por calidad",
-    },
-  },
-  {
     name: "reach",
     copy: {
       spanish: "Alcance",
@@ -170,7 +152,7 @@ export const FB_ADS_METRICS = [
   {
     name: "unique_inline_link_clicks",
     copy: {
-      spanish: "Clicks únicos en enlace en línea",
+      spanish: "Clics únicos en enlace en línea",
     },
   },
   {
