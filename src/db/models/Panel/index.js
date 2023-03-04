@@ -18,7 +18,7 @@ const panelSchema = new mongoose.Schema(
 );
 
 panelSchema.pre("deleteMany", async function () {
-  const panelIds = (await this.model.findOne(this.getFilter())).map(
+  const panelIds = (await this.model.find(this.getFilter())).map(
     (panel) => panel._id
   );
 
