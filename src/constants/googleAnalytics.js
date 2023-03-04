@@ -1,3 +1,5 @@
+import { OPERATORS } from "./operators";
+
 export const GA_METRICS = [
   {
     name: "activeUsers",
@@ -807,3 +809,10 @@ export const GA_DIMENSIONS = [
     },
   },
 ];
+
+export const GA_OPERATORS = {
+  [OPERATORS.EQUAL]: "EXACT",
+  [OPERATORS.STARTS_WITH]: "BEGINS_WITH",
+  [OPERATORS.ENDS_WITH]: "ENDS_WITH",
+  [OPERATORS.CONTAIN]: "CONTAINS",
+};

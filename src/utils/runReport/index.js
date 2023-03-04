@@ -1,7 +1,9 @@
+import { BetaAnalyticsDataClient } from "@google-analytics/data";
 import { FacebookAdsApi, AdAccount } from "facebook-nodejs-business-sdk";
 
-import { CONNECTION_TYPES } from "@/constants";
+import { CONNECTION_TYPES, GA_OPERATORS } from "@/constants";
 import { Connection } from "@/db/models/Connection";
+import { getGoogleOAuth2Client } from "@/thirdParty/googleAuth";
 import { getTimeRange } from "@/utils/getTimeRange";
 
 export const runReport = async ({
@@ -11,7 +13,7 @@ export const runReport = async ({
   timespan,
   filters,
 }) => {
-  const { type, accessToken } = await Connection.findById(
+  const { type, accessToken, refreshToken } = await Connection.findById(
     selector.connectionId
   );
 
@@ -20,6 +22,50 @@ export const runReport = async ({
   try {
     switch (type) {
       case CONNECTION_TYPES.GOOGLE_ANALYTICS: {
+        const googleOAuth2Client = getGoogleOAuth2Client();
+        googleOAuth2Client.setCredentials({ refresh_token: refreshToken });
+
+        const analyticsDataClient = new BetaAnalyticsDataClient({
+          authClient: googleOAuth2Client,
+        });
+
+        const { since: startDate, until: endDate } = getTimeRange(timespan);
+        const params = {
+          property: selector._id,
+          dateRanges: [{ startDate, endDate }],
+          metrics: [{ name: metricName }],
+          ...(dimensionName && { dimensions: [{ name: dimensionName }] }),
+          ...(filters.length && {
+            dimensionFilter: {
+              andGroup: {
+                expressions: filters.map(({ fieldName, operator, operand }) => {
+                  const filter = {
+                    fieldName,
+                    stringFilter: {
+                      matchType: GA_OPERATORS[operator.replace("NOT_", "")],
+                      value: operand,
+                      caseSensitive: false,
+                    },
+                  };
+
+                  if (operator.includes("NOT_")) {
+                    return { notExpression: { filter } };
+                  }
+
+                  return { filter };
+                }),
+              },
+            },
+          }),
+        };
+
+        rows = (await analyticsDataClient.runReport(params))[0].rows.map(
+          ({ metricValues, dimensionValues }) => ({
+            [metricName]: metricValues[0].value,
+            [dimensionName]: dimensionValues[0].value,
+          })
+        );
+
         break;
       }
       case CONNECTION_TYPES.FACEBOOK_ADS: {
