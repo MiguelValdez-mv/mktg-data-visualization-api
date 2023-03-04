@@ -1,6 +1,7 @@
 import mongoose from "mongoose";
 
 import { BUSINESS_TYPES } from "@/constants";
+import { Panel } from "@/db/models/Panel";
 
 const businessSchema = new mongoose.Schema(
   {
@@ -19,5 +20,13 @@ const businessSchema = new mongoose.Schema(
     timestamps: true,
   }
 );
+
+businessSchema.pre("deleteMany", async function () {
+  const businessIds = (await this.model.find(this.getFilter())).map(
+    (business) => business._id
+  );
+
+  await Panel.deleteMany({ businessId: { $in: businessIds } });
+});
 
 export const Business = mongoose.model("Business", businessSchema);
