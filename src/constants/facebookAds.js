@@ -1,23 +1,5 @@
 export const FB_ADS_METRICS = [
   {
-    name: "catalog_segment_value_mobile_purchase_roas",
-    copy: {
-      spanish: "ROAS de compras en la aplicación móvil",
-    },
-  },
-  {
-    name: "catalog_segment_value_omni_purchase_roas",
-    copy: {
-      spanish: "ROAS de compras",
-    },
-  },
-  {
-    name: "catalog_segment_value_website_purchase_roas",
-    copy: {
-      spanish: "ROAS de compras en el sitio web",
-    },
-  },
-  {
     name: "clicks",
     copy: {
       spanish: "Clics",
