@@ -61,8 +61,8 @@ export const runReport = async ({
 
         rows = (await analyticsDataClient.runReport(params))[0].rows.map(
           ({ metricValues, dimensionValues }) => ({
-            [metricName]: metricValues[0].value,
-            [dimensionName]: dimensionValues[0].value,
+            [metricName]: Number(metricValues[0].value),
+            ...(dimensionName && { [dimensionName]: dimensionValues[0].value }),
           })
         );
 
