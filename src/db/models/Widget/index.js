@@ -13,7 +13,7 @@ const selectorSchema = new mongoose.Schema({
   },
 });
 
-const timeSchema = new mongoose.Schema(
+const timespanSchema = new mongoose.Schema(
   {
     amount: {
       type: Number,
@@ -67,7 +67,7 @@ const widgetSchema = new mongoose.Schema(
     },
     dimensionName: { type: String },
     timespan: {
-      type: timeSchema,
+      type: timespanSchema,
       required: true,
     },
     title: { type: String },
