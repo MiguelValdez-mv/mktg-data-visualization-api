@@ -251,24 +251,6 @@ export const GA_METRICS = [
 
 export const GA_DIMENSIONS = [
   {
-    name: "adFormat",
-    copy: {
-      spanish: "Formato del anuncio",
-    },
-  },
-  {
-    name: "adSourceName",
-    copy: {
-      spanish: "Fuente del anuncio",
-    },
-  },
-  {
-    name: "adUnitName",
-    copy: {
-      spanish: "Bloque de anuncios",
-    },
-  },
-  {
     name: "appVersion",
     copy: {
       spanish: "Versión de la aplicación",

@@ -3,4 +3,5 @@ export const CHART_TYPES = {
   LINE: "LINE",
   BAR: "BAR",
   AREA: "AREA",
+  TABLE: "TABLE",
 };
